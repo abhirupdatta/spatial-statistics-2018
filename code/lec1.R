@@ -8,6 +8,9 @@ library(RColorBrewer)
 ### dataset 1 ###
 data1=read.csv("../data/dataset1.csv")
 
+
+### plotting ###
+
 col.br <- colorRampPalette(c("midnightblue", "cyan", "yellow", "red"))
 col.pal <- col.br(5)
 
