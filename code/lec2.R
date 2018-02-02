@@ -160,7 +160,7 @@ plot(vario.logDBH.resid,pch=16)
 
 
 ### spatial mle ###
-mle <- likfit(coords=coords, data=logDBH, trend = trend.spatial(~Species,WEF.in), ini.cov.pars=c(0.1,100),
+mle <- likfit(coords=coords, data=logDBH, trend = trend.spatial(~Species,WEF.in), ini.cov.pars=c(0.1,40),
               nugget = 0.25,cov.model="exponential",nospatial=TRUE)
 
 mle
