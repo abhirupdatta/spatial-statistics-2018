@@ -25,7 +25,6 @@ myplot(data3,"x")
 
 
 lmobj3=lm(y~x,data=data3)
-
 data3$res=lmobj3$residuals
 
 myplot(data3,"res")
