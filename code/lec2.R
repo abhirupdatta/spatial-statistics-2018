@@ -213,7 +213,8 @@ CP_spatial
 CIW_spatial
 
 N=nrow(WEF.out)
-CI_lm=pred_lm+1.96*summary(lm.logDBH)$sigma*cbind(-rep(1,N),rep(1,N))
+#CI_lm=pred_lm+1.96*summary(lm.logDBH)$sigma*cbind(-rep(1,N),rep(1,N))
+CI_lm=predict(lm.logDBH,WEF.out,interval="prediction")[,-1]
 CP_lm=mean(CI_lm[,1]<WEF.out$logDBH & CI_lm[,2]>WEF.out$logDBH)
 CIW_lm=mean(CI_lm[,2]-CI_lm[,1])
 
@@ -238,4 +239,3 @@ image.plot(predsurf, xaxs = "r", yaxs = "r", xlab="Easting (m)", ylab="Northing 
 predsdsurf <- mba.surf(cbind(WEF.pred[,c("East_m","North_m")],predsd), no.X=100, no.Y=100, h=5, m=2, extend=FALSE)$xyz.est
 dev.new()
 image.plot(predsdsurf, xaxs = "r", yaxs = "r", xlab="Easting (m)", ylab="Northing (m)", col=rev(terrain.colors(25)))
-
