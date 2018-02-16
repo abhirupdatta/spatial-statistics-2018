@@ -103,7 +103,6 @@ dev.new()
 image.plot(predregvarsurf, xaxs = "r", yaxs = "r", xlab="Easting (m)", ylab="Northing (m)", col=rev(terrain.colors(25)))
 
 #### why variance of the linear regression component is high in some patches ####
-
 WEF.pred$Species[which(predregvar>0.02)]
 length(which(predregvar>0.02))
 table(WEF.pred$Species)
