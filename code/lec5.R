@@ -20,22 +20,22 @@ library("mvtnorm")
 library("MCMCpack")
 library("coda")
 
-### Gibbs sampler simulated dataset 3 from lecture 1 ####
-data3=read.csv("../data/dataset3.csv")
-
 ### function for plotting interpolated surface of a column of a data table
 myplot=function(tab,colname){
-    
-    surf <- mba.surf(tab[,c("sx","sy",colname)], no.X=100, no.Y=100, h=5, m=2, extend=FALSE)$xyz.est
-    dev.new()
-    image.plot(surf, xaxs = "r", yaxs = "r", xlab="Easting (m)", ylab="Northing (m)", col=col.br(25))
-    
+  
+  surf <- mba.surf(tab[,c("sx","sy",colname)], no.X=100, no.Y=100, h=5, m=2, extend=FALSE)$xyz.est
+  dev.new()
+  image.plot(surf, xaxs = "r", yaxs = "r", xlab="Easting (m)", ylab="Northing (m)", col=col.br(25))
+  
 }
-
-### data and covariate surface plots
 col.br <- colorRampPalette(c("midnightblue", "cyan", "yellow", "red"))
 col.pal <- col.br(5)
 
+
+### Gibbs sampler simulated dataset 3 from lecture 1 ####
+data3=read.csv("../data/dataset3.csv")
+
+### data and covariate surface plots
 n=nrow(data3)
 
 X=cbind(1,data3$x)
@@ -49,7 +49,7 @@ dmat=as.matrix(dist(S))
 N=10000
 Nb=5001
 
-#### true values and posterior distribution and quantiles ####
+#### true values ####
 truesigs=0.25
 truetaus=0.01
 truebeta=c(0.2,-0.3)
@@ -141,7 +141,7 @@ plot(samples[,2+77],lwd=2,main="w77",xlab="",ylab="",col="red",
      type="l",ylim=range(samples[,2+77],samples12345[,2+77]))
 lines(samples12345[,2+77],lwd=2,col="blue")
 
-plot(samples[,2+498],lwd=2,main="w77",xlab="",ylab="",col="red",
+plot(samples[,2+498],lwd=2,main="w498",xlab="",ylab="",col="red",
      type="l",ylim=range(samples[,2+498],samples12345[,2+498]))
 lines(samples12345[,2+498],lwd=2,col="blue")
 
@@ -180,7 +180,7 @@ lines(density(samples12345[-(1:Nb),n+4]),lwd=2,col="blue")
 plot(density(samples[-(1:Nb),2+77]),lwd=2,main="w77",xlab="",ylab="",col="red",type="l")
 lines(density(samples12345[-(1:Nb),2+77]),lwd=2,col="blue")
 
-plot(density(samples[-(1:Nb),2+498]),lwd=2,main="w77",xlab="",ylab="",col="red",type="l")
+plot(density(samples[-(1:Nb),2+498]),lwd=2,main="w498",xlab="",ylab="",col="red",type="l")
 lines(density(samples12345[-(1:Nb),2+498]),lwd=2,col="blue")
 
 
@@ -416,7 +416,6 @@ y=data3$y
 S=data3[,c("sx","sy")]
 dmat=as.matrix(dist(S))
 
-
 gpcov <- nimbleFunction(
     run = function(dmat=double(2),phi=double(0),n=double(0)){
         returnType(double(2))
@@ -480,13 +479,21 @@ Cmcmc$run(100) ## running MCMC
 samples <- as.matrix(Cmcmc$mvSamples)
 #write.csv(samples,"data3nimble.csv",quote=F,row.names=F)
 
-### loading the pre-saved samples
-### samples = read.csv("data3nimble.csv")
+### loading the pre-saved samples with 10000 iterations
+### samples = read.csv("data3nimble.csv") 
 
+N=10000
+Nb=5001
 pbsample <- samples[Nb:N,] ## post burn-in samples
 
 qtls <- apply(pbsample,2,quantile,c(0.025,0.5,0.95))
-qtls
+round(qtls,3)
+
+#### true values ####
+truesigs=0.25
+truetaus=0.01
+truebeta=c(0.2,-0.3)
+truephi=2
 
 #### true values and posterior distribution and quantiles ####
 dev.new()
@@ -614,6 +621,9 @@ bef.sp <- spRecover(bef.sp, start=burn.in, thin=2)
 ## The posterior samples of the regression coefficients and the spatial effects can then be obtained as
 beta.samples = bef.sp$p.beta.recover.samples
 w.samples = bef.sp$p.w.recover.samples
+
+### DIC using spDiag 
+spDiag(bef.sp)$DIC
 
 ## Obtain trace plots for regression coefficients
 dev.new()
