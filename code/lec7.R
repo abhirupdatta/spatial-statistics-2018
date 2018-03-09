@@ -275,6 +275,8 @@ m.r$run.time
 m.c$run.time
 
 #### true and predicted y scatterplot
+y.hat.r <- apply(p.r$p.y.0, 1, mean)
+
 dev.new()
 par(mfrow=c(1,2))
 plot(CHM.ho[,3], y.hat.r, main="Response NNGP model",
@@ -283,8 +285,6 @@ plot(CHM.ho[,3],m.c$y.0.hat, main="Conjugate NNGP model",
      xlab="True canopy height", ylab="Posterior predictive distribution mean")
 
 #### out of sample RMSPE and CP
-y.hat.r <- apply(p.r$p.y.0, 1, mean)
-
 ### coverage probability ###
 cp.r=mean((apply(p.r$p.y.0, 1, quantile, 0.025) < CHM.ho[,3]) & 
             (apply(p.r$p.y.0, 1, quantile, 0.975) > CHM.ho[,3]))
@@ -292,6 +292,8 @@ cp.r=mean((apply(p.r$p.y.0, 1, quantile, 0.025) < CHM.ho[,3]) &
 cp.r
 
 ### coverage probability ###
+y.hat.c <- m.c$y.0.hat
+
 cp.c=mean((abs(CHM.ho[,3] - y.hat.c) <  qnorm(0.975)*sqrt(m.c$y.0.hat.var)))
 cp.c
 
@@ -299,7 +301,6 @@ cp.c
 sqrt(mean((CHM.ho[,3]- y.hat.r)^2))
 
 #### out of sample RMSPE and CP
-y.hat.c <- m.c$y.0.hat
 
 ### RMSPE 
 sqrt(mean((CHM.ho[,3]- y.hat.c)^2))
