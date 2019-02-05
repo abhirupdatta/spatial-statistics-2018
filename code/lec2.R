@@ -20,6 +20,7 @@ myplot=function(tab,colname){
   
 }
 
+dev.new()
 myplot(data3,"y")
 myplot(data3,"x")
 
@@ -82,8 +83,6 @@ myplot(data3,"res3")
 dev.new()
 vario3s <- variog(coords=data3[,1:2], data=data3$res3, uvec=(seq(0, max.dist, length=bins)))
 plot(vario3s,pch=16)
-
-
 
 ###################################################
 ### WEF data
