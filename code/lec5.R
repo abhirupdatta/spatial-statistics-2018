@@ -159,6 +159,7 @@ legend("topleft",c("beta0","beta1","sigs","taus","w(s_i)"),bty='n',
 
 gr$mpsrf
 
+### THIS TAKES A LONG TIME ###
 gelman.plot(mcmclist) ### this will create plot for all 504 variables ####
 
 
